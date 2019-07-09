@@ -88,5 +88,4 @@ class Util():
 def main ():
         print ("here")
         u = Util()
-        #print (u.readNDISASMFile('/home/kejsi/3authors/kAc/1645485_1673486_kAc.dis'))
 main()

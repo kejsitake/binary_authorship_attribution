@@ -112,6 +112,41 @@ def main():
         f.write("@attribute 'bjoernLineBigrams" + str(count) +
                 "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric" + "\n")
         count += 1
+    # NDISASM FEATURES START
+    # Related files:
+    # 1645485_1480492_a9108_NDISASMDisassembly/nodes.csv
+    # 1645485_1480492_a9108_NDISASMDisassembly/1645485_1480492_a9108CFG/*.graphml
+    # get the basic block node unigrams in NDISASM CFG and write the node unigram features
+    fe = FeatureExtractorDisassemblyNDISASM()
+    #DISASSEMBLY INSTRUCTION UNIGRAMS
+    #CFG NODE UNIGRAMS - REPR
+    #get the instruction unigrams in NDISASM disassembly and write the instruction unigram features
+    NDISASMDisassemblyUnigrams = fe.getNDISASMDisassemblyInstructionUnigrams(testDir)
+    count = 0
+    for unigram in NDISASMDisassemblyUnigrams:
+            print ( "@attribute 'NDISASMDisassemblyInstructionUnigrams" + str(count) + "=[" + unigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            f.write( "@attribute 'NDISASMDisassemblyInstructionUnigrams" + str(count) + "=[" + unigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            count+=1
+    NDISASMDisassemblyBigrams = fe.getNDISASMDisassemblyInstructionBigrams(testDir)
+    count = 0
+    for bigram in NDISASMDisassemblyBigrams:
+            print ( "@attribute 'NDISASMDisassemblyInstructionBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            f.write( "@attribute 'NDISASMDisassemblyInstructionBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            count+=1  
+    NDISASMDisassemblyTrigrams = fe.getNDISASMDisassemblyInstructionTrigrams(testDir)
+    count = 0
+    for trigram in NDISASMDisassemblyTrigrams:
+            print ( "@attribute 'NDISASMDisassemblyInstructionTrigrams" + str(count) + "=[" + trigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            f.write( "@attribute 'NDISASMDisassemblyInstructionTrigrams" + str(count) + "=[" + trigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            count+=1   
+
+    lineBigrams = fe.getNDISASMDisassemblyLineBigrams(testDir)
+    count = 0
+    for bigram in lineBigrams:
+            print ( "@attribute 'NDISASMDisassemblyLineBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            f.write( "@attribute 'NDISASMDisassemblyLineBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
+            count+=1
+    
     fc = FeatureCalculators()
     ASTTypes = fc.uniqueDepASTTypes(testDir)
     count = 0
