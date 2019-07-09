@@ -1,0 +1,108 @@
+import os, re
+from  Util import Util
+from  pathlib import Path
+from array import *
+
+class FeatureExtractorBjoern():
+	#u = Util()
+	
+	def getBjoernCFGGraphmlNodeUnigrams(self, dirPath):
+		words = []
+		nodes = []
+		to_add = []
+		u = Util()
+		test_file_paths = u.listFiles(dirPath, ".graphml")
+		#print (test_file_paths)
+		for file in test_file_paths:
+			f = open(file).readlines()
+			replace_map = {
+			"<node id=": "\n <node id=",
+			"<edge id=": "\n <edge id=",
+			}
+			for line in f:
+				for key, word in replace_map.items():
+					nodes.append(re.sub (key, word, line))
+			for node in nodes:	
+				if  (">BB</data>" in node):
+					temp =  node.split("data key=",5)
+				node = temp[1]
+				node_replace_map = {
+				re.compile(r'[[]*0[xX][0-9a-fA-F]+[]]*'): "hexadecimal",
+				re.compile(r'\d+'): "number",
+				re.compile(r'\\s+'): "\s"
+				}
+				node = node.replace('\\,',' ')
+				node = node.replace("\"repr\">", " ")
+				node = node.replace("</data><", " ")
+				#node = node.replace("\d+", "number")
+				node = node.replace('|', ' ')
+				node = node.replace('\s+', ' ')
+				for key, word in node_replace_map.items():
+					node = re.sub(key, word, node)
+					#node = node.replace(key, word)
+					node = re.sub(r'\d+', "number",node)
+					to_add.append(node)
+		for add in to_add:
+			temp = add.split(" ")
+			for t in temp:
+				temp2 = t.split(" ")
+				for t2 in temp2:
+					if t2 not in words:
+						print (t2)
+						words.append(t2)
+
+		return words
+
+	def getBjoernLineUnigrams (self, dirPath):
+		u = Util()
+		uniqueLineUnigrams = []
+		test_file_paths = u.listFiles(dirPath, ".graphml")
+                #print (test_file_paths)
+		for file in test_file_paths:
+                        f = open(file).readlines()
+                        replace_map = {
+                        "<node id=": "\n <node id=",
+                        "<edge id=": "\n <edge id=",
+                        }
+                        for line in f:
+                                for key, word in replace_map.items():
+                                        nodes.append(re.sub (key, word, line))
+	def listBjoernNodeFiles (self, dirPath):
+		u = Util()
+		node_file_paths = []
+		test_file_paths = u.listFiles(dirPath, ".csv")
+		for file in test_file_paths:
+			#print (file)
+			if "nodes.csv" in file:
+				node_file_paths.append(file) 
+		return node_file_paths
+	
+def main():
+	u = Util()
+	f = open("/home/kejsi/PythonBda/py_test.arff", 'w+')
+	testDir = "/home/kejsi/3authors/"
+	test_binary_paths = u.listBinaryFiles(testDir)
+	print (test_binary_paths)
+	f.write("@relation " + testDir + "BjoernCFGDisassembly" +"\n\n")
+	f.write("@attribute instanceID_original {")
+	for file in test_binary_paths:
+		f.write(str(file) +'_'+testDir.split('/')[len(testDir.split('/'))-2] +',')
+	f.write('}' +'\n')
+	#authorFileName = ' '
+	f.write("@attribute 'authorName_original' {" )
+	authors = []
+	for file in test_binary_paths:
+		authorFileName = (file.split('_')[2])
+		#print ("author: " + authorFileName)
+		if authorFileName not in authors:
+			authors.append(authorFileName)
+	for name in authors:
+		f.write (name + ',')
+	f.write('}' + '\n \n')
+	
+	fe = FeatureExtractorBjoern()
+	#CFG NODE UNIGRAMS 
+	print (fe.getBjoernCFGGraphmlNodeUnigrams(testDir))
+	print (fe.listBjoernNodeFiles(testDir))	
+	f.write ('@data \n') 
+main()
