@@ -2,6 +2,7 @@ import os
 import re
 from Util import Util
 from FeatureExtractorBjoern import FeatureExtractorBjoern
+from FeatureExtractorDisassemblyNDISASM import FeatureExtractorDisassemblyNDISASM
 from BigramExtractor import BigramExtractor
 from FeatureCalculators import FeatureCalculators
 from DepthASTNode import DepthASTNode
@@ -117,30 +118,30 @@ def main():
     # 1645485_1480492_a9108_NDISASMDisassembly/nodes.csv
     # 1645485_1480492_a9108_NDISASMDisassembly/1645485_1480492_a9108CFG/*.graphml
     # get the basic block node unigrams in NDISASM CFG and write the node unigram features
-    fe = FeatureExtractorDisassemblyNDISASM()
+    fedn = FeatureExtractorDisassemblyNDISASM()
     #DISASSEMBLY INSTRUCTION UNIGRAMS
     #CFG NODE UNIGRAMS - REPR
     #get the instruction unigrams in NDISASM disassembly and write the instruction unigram features
-    NDISASMDisassemblyUnigrams = fe.getNDISASMDisassemblyInstructionUnigrams(testDir)
+    NDISASMDisassemblyUnigrams = fedn.getNDISASMDisassemblyInstructionUnigrams(testDir)
     count = 0
     for unigram in NDISASMDisassemblyUnigrams:
             print ( "@attribute 'NDISASMDisassemblyInstructionUnigrams" + str(count) + "=[" + unigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
             f.write( "@attribute 'NDISASMDisassemblyInstructionUnigrams" + str(count) + "=[" + unigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
             count+=1
-    NDISASMDisassemblyBigrams = fe.getNDISASMDisassemblyInstructionBigrams(testDir)
+    NDISASMDisassemblyBigrams = fedn.getNDISASMDisassemblyInstructionBigrams(testDir)
     count = 0
     for bigram in NDISASMDisassemblyBigrams:
             print ( "@attribute 'NDISASMDisassemblyInstructionBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
             f.write( "@attribute 'NDISASMDisassemblyInstructionBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
             count+=1  
-    NDISASMDisassemblyTrigrams = fe.getNDISASMDisassemblyInstructionTrigrams(testDir)
+    NDISASMDisassemblyTrigrams = fedn.getNDISASMDisassemblyInstructionTrigrams(testDir)
     count = 0
     for trigram in NDISASMDisassemblyTrigrams:
             print ( "@attribute 'NDISASMDisassemblyInstructionTrigrams" + str(count) + "=[" + trigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
             f.write( "@attribute 'NDISASMDisassemblyInstructionTrigrams" + str(count) + "=[" + trigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
             count+=1   
 
-    lineBigrams = fe.getNDISASMDisassemblyLineBigrams(testDir)
+    lineBigrams = fedn.getNDISASMDisassemblyLineBigrams(testDir)
     count = 0
     for bigram in lineBigrams:
             print ( "@attribute 'NDISASMDisassemblyLineBigrams" + str(count) + "=[" + bigram.replace("'", "apostrophesymbol")+"]' numeric"+ "\n")
@@ -229,6 +230,18 @@ def main():
         lineBigramsCount = fe.getBjoernLineBigramsTF((open(file +"_bjoernDisassembly/nodes.csv", errors='ignore').read()), lineBigrams)
         for lineBigram in lineBigramsCount:
             f.write(str(lineBigramsCount[lineBigram]) + ", ")
+        wordUniCount = fedn.getNDISASMDisassemblyInstructionUnigramsTF((open(file, errors= 'ignore').read()),NDISASMDisassemblyUnigrams )
+        for  wordUnigram in wordUniCount:
+                f.write(str(wordUniCount[wordUnigram]) + ", ")
+        wordBigramsCount = fedn.getNDISASMDisassemblyInstructionBigramsTF(str(open( file, errors= 'ignore').read()),NDISASMDisassemblyBigrams )
+        for  wordBigram in wordBigramsCount:
+                f.write(str(wordBigramsCount[wordBigram]) + ", ")
+        wordTrigramsCount = fedn.getNDISASMDisassemblyInstructionTrigramsTF(str(open(file, errors= 'ignore').read()),NDISASMDisassemblyTrigrams )
+        for  wordTrigram in wordTrigramsCount:
+                f.write(str(wordTrigramsCount[wordTrigram]) + ", ")
+        lineBigramsCount = fedn.getNDISASMLineBigramsTF(str(open(file, errors= 'ignore').read()),lineBigrams )
+        for  lineBigram in lineBigramsCount:
+                f.write(str(lineBigramsCount[lineBigram]) + ", ")
         typeCount = fc.DepASTTypeTF((open(file+ "_hexrays_decompiled.dep", errors='ignore').readlines()),ASTTypes)
         for ast in typeCount :
             f.write(str(typeCount[ast]) + ",")

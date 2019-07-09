@@ -415,7 +415,6 @@ class FeatureExtractorBjoern():
         featureText = re.sub(self.nr_reg_ex, "number", featureText)
         featureText = re.sub(self.multi_sp_reg_ex, " ", featureText)
         #featureText = re.sub(self.multi_dots_reg_ex, " ", featureText)
-        import pdb; pdb.set_trace()
         for token in lineUnigrams:
             token = token.strip()
             if token in dict_TF:

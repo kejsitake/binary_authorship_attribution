@@ -289,16 +289,16 @@ def main():
 	f.write ('@data \n')
 	for file in test_binary_paths:
 		f.write(str(file) +'_'+testDir.split('/')[len(testDir.split('/'))-2] +',') 
-		wordUniCount = fe.getNDISASMDisassemblyInstructionUnigramsTF(str(open(os.path.join(testDir,file.split('_')[2]+'/'+file), errors= 'ignore').readlines()),NDISASMDisassemblyUnigrams )
+		wordUniCount = fe.getNDISASMDisassemblyInstructionUnigramsTF((open(file, errors= 'ignore').read()),NDISASMDisassemblyUnigrams )
 		for  wordUnigram in wordUniCount:
 			f.write(str(wordUniCount[wordUnigram]) + ", ")
-		wordBigramsCount = fe.getNDISASMDisassemblyInstructionBigramsTF(str(open(os.path.join(testDir,file.split('_')[2]+'/'+file), errors= 'ignore').readlines()),NDISASMDisassemblyBigrams )
+		wordBigramsCount = fe.getNDISASMDisassemblyInstructionBigramsTF(str(open( file, errors= 'ignore').read()),NDISASMDisassemblyBigrams )
 		for  wordBigram in wordBigramsCount:
 			f.write(str(wordBigramsCount[wordBigram]) + ", ")
-		wordTrigramsCount = fe.getNDISASMDisassemblyInstructionTrigramsTF(str(open(os.path.join(testDir,file.split('_')[2]+'/'+file), errors= 'ignore').readlines()),NDISASMDisassemblyTrigrams )
+		wordTrigramsCount = fe.getNDISASMDisassemblyInstructionTrigramsTF(str(open(file, errors= 'ignore').read()),NDISASMDisassemblyTrigrams )
 		for  wordTrigram in wordTrigramsCount:
 			f.write(str(wordTrigramsCount[wordTrigram]) + ", ")
-		lineBigramsCount = fe.getNDISASMLineBigramsTF(str(open(os.path.join(testDir,file.split('_')[2]+'/'+file), errors= 'ignore').readlines()),lineBigrams )
+		lineBigramsCount = fe.getNDISASMLineBigramsTF(str(open(file, errors= 'ignore').read()),lineBigrams )
 		for  lineBigram in lineBigramsCount:
 			f.write(str(lineBigramsCount[lineBigram]) + ", ")
 main()
