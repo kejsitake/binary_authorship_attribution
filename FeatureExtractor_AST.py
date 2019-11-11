@@ -27,8 +27,7 @@ def main():
     f.write("@attribute instanceID_original {")
     file_counter = 0
     for file in test_binary_paths:
-        print(Path(file))
-        print ("Author" + str(file.split('/')[len(file.split("/"))-2]))
+        #print ("Author" + str(file.split('/')[len(file.split("/"))-2]))
         #print (str(file) + '_'+testDir.split('/')
                 #[len(testDir.split('/'))-2] + ',')
         #f.write(str(file) + '_'+testDir.split('/')[len(testDir.split('/'))-2] + ',')
@@ -42,9 +41,6 @@ def main():
         # print ("author: " + authorFileName)
         if authorFileName not in authors:
             authors.append(authorFileName)
-    '''for name in authors:
-        f.write(name + ',')
-    f.write('}' + '\n \n')'''
     fc = FeatureCalculators()
     ASTTypes = fc.uniqueDepASTTypes(testDir)
     count = 0
@@ -63,8 +59,8 @@ def main():
         count += 1'''
     count = 0
     for ast in ASTTypes:
-        print ("@attribute 'ASTNodeTypesAvgDepthASTNode " + str(count) +
-               "=[" + ast.replace("'", "apostrophesymbol")+"]' numeric" + "\n")
+        #print ("@attribute 'ASTNodeTypesAvgDepthASTNode " + str(count) +
+        #       "=[" + ast.replace("'", "apostrophesymbol")+"]' numeric" + "\n")
         f.write("@attribute 'ASTNodeTypesAvgDepthASTNode " + str(count) +
                 " =[ " + ast.replace("'", "apostrophesymbol")+"]' numeric" + "\n")
         count += 1
@@ -93,9 +89,6 @@ def main():
         for depF in DepFeature:
             f.write(str(DepFeature[depF]) + ",")
         print (file)
-        '''cKeywordsTF = fc.getCandCPPKeywordsTF(open(file+ "_hexrays_decompiled.cpp", errors='ignore').read())
-        for word in cKeywords:
-            f.write(str(cKeywordsTF[word])+ ",")'''
         f.write(authorFileName +"_"+ file.split('/')[-3])
         #f.write(authorFileName )
         f.write(" " + "\n")

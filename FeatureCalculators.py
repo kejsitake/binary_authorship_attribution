@@ -56,10 +56,13 @@ class FeatureCalculators():
        uniqueWords = []
        arr = []
        for file in test_file_paths:
-           inputText = open(file).read()
+           fileContent = open(file).read()
            #print (inputText)
-           inputText = re.sub(self.nr_reg_ex," ", inputText)
-           inputText = inputText.replace("(", "splithere")
+           inputText1 = re.sub(self.nr_reg_ex," ", fileContent)
+           inputText2 = re.sub(r" \d+"," ", inputText1)
+           inputText3 = re.sub(r"\d", "",inputText2)
+           #import pdb; pdb.set_trace()
+           inputText = inputText3.replace("(", "splithere")
            inputText = inputText.replace(")", "splithere")
            inputText = re.sub(self.multi_sp_reg_ex," ", inputText)
            #import pdb; pdb.set_trace()

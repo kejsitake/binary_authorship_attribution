@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os,glob
 
 class Util():
